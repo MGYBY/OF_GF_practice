@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      Ua;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+//     inlet
+//     {
+//         type            groovyBC;
+//         refValue        uniform   (0 0 0);
+//         // valueExpression "vector(inletprofileuax(pos().y),inletprofileuay(pos().y),inletprofileuaz(pos().y))";
+//         valueExpression "vector(1.50,0.0,0.0)";
+//         gradientExpression "vector(0,0,0)";
+//         fractionExpression "1";
+//         evaluateDuringConstruction 1;
+//         variables       "";
+//         timelines       (
+// );
+//         lookuptables    (
+// {
+//     name            inletprofileuax;
+//     file        "$FOAM_CASE/1d_profil/Ua0.xy";
+//     outOfBounds     clamp;
+// }
+
+// {
+//     name            inletprofileuay;
+//     file        "$FOAM_CASE/1d_profil/Ua1.xy";
+//     outOfBounds     clamp;
+// }
+
+// {
+//     name            inletprofileuaz;
+//     file        "$FOAM_CASE/1d_profil/Ua2.xy";
+//     outOfBounds     clamp;
+// }
+// );
+//     }
+
+    inlet{
+    type            zeroGradient;
+    }
+    // inlet
+    // {
+    //     type            inletOutlet;
+    //     inletValue      uniform (1.0 0 0);
+    //     value           uniform (0 0 0);
+    // }
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    // inlet
+    // {
+    //     type            cyclic;
+    // }
+    // outlet
+    // {
+    //     type            cyclic;
+    // }
+    top
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    bottom
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    frontAndBackPlanes
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //

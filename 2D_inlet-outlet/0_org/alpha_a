@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      alpha;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0;  // the analytical IC is to be set in FSF dict.
+
+boundaryField
+{
+    inlet
+    {
+        type            groovyBC;
+        refValue        uniform 0;
+        valueExpression "inletprofilealpha(pos().y)";
+        gradientExpression "0";
+        fractionExpression "1";
+        evaluateDuringConstruction 1;
+        variables       "";
+        timelines       (
+);
+        lookuptables    (
+{
+        name            inletprofilealpha;
+        file        "$FOAM_CASE/1d_profil/alpha_a.xy";
+        outOfBounds     clamp;
+}
+);
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+// inlet
+// {
+//     type            cyclic;
+// }
+// outlet
+// {
+//     type            cyclic;
+// }
+    top
+    {
+        type            fixedValue;
+	value		uniform 0;
+    }
+    bottom
+    {
+        type            zeroGradient;
+    }
+    frontAndBackPlanes
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //
