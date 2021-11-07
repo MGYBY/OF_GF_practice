@@ -1,0 +1,216 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.7.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+// normal depth
+depth 0.50;
+ndepth 16;
+// square block dimension
+width #calc "$depth*3.0";
+
+xn1  #calc "$width*2.0";
+xn2  #calc "$xn1+$width";
+xn3  #calc "$depth*13.50";
+
+yn1  #calc "$depth*3.0";
+yn2  #calc "$depth*6.0";
+yn3  #calc "$depth*9.0";
+
+zn  #calc "$depth*2.0";
+
+// alternatively, use value assignment for uneven grid
+hrf 2;
+// NX1 #calc "$xn1/$depth*$ndepth/$hrf";
+// NX2 #calc "$width/$depth*$ndepth/$hrf";
+// NX3 #calc "($xn3-$xn2)/$depth*$ndepth/$hrf";
+
+// NY1 #calc "$yn1/$depth*$ndepth/$hrf";
+// NY2 #calc "$width/$depth*$ndepth/$hrf";
+// NY3 #calc "($yn3-$yn2)/$depth*$ndepth/$hrf";
+
+// NZ #calc "2.5*$ndepth";
+
+NX1 #calc "$xn3/$depth*$ndepth/$hrf";
+NY1 #calc "$yn3/$depth*$ndepth/$hrf";
+
+// NX1 96;
+// NX2 24;
+// NX3 36;
+
+// NY1 24;
+// NY2 24;
+// NY3 24;
+
+NZ #calc "2.0*$ndepth";
+// NZ 1.0;
+
+//Cell expansion ratios
+// original CERs
+// xe_front 0.08428845675;
+// ye_bottom 0.04583554871;
+// ye_top 21.81870025;
+// xe_back 13.45427455; 
+
+// xe_front 0.02761;
+// ye_bottom 0.02832;
+// ye_top 3.555;
+// xe_back 3.505; 
+
+xe_front 1;
+ye_bottom 1;
+ye_top 1;
+xe_back 1; 
+
+vertices
+(
+    //Foward vertices (0-7)
+    (0 0 0) // 0
+    ($xn1 0 0) // 1
+    (0 $yn1 0) // 2
+    ($xn1 $yn1 0) // 3
+    (0 $yn2 0) // 4
+    ($xn1 $yn2 0) // 5
+    (0 $yn3 0) // 6
+    ($xn1 $yn3 0) // 7
+
+    //Rear vertices (8-15)
+    ($xn2 0 0) // 8
+    ($xn3 0 0) // 9
+    ($xn2 $yn1 0) // 10
+    ($xn3 $yn1 0) // 11
+    ($xn2 $yn2 0) // 12
+    ($xn3 $yn2 0) // 13
+    ($xn2 $yn3 0) // 14
+    ($xn3 $yn3 0) // 15
+
+    //Z+ Foward vertices (16-23)
+    (0 0 $zn) // 16
+    ($xn1 0 $zn) // 17
+    (0 $yn1 $zn) // 18
+    ($xn1 $yn1 $zn) // 19
+    (0 $yn2 $zn) // 20
+    ($xn1 $yn2 $zn) // 21
+    (0 $yn3 $zn) // 22
+    ($xn1 $yn3 $zn) //23
+
+    //Z+ Rear vertices (24-31)
+    ($xn2 0 $zn) // 24
+    ($xn3 0 $zn) // 25
+    ($xn2 $yn1 $zn) // 26
+    ($xn3 $yn1 $zn) // 27
+    ($xn2 $yn2 $zn) // 28
+    ($xn3 $yn2 $zn) // 29
+    ($xn2 $yn3 $zn) // 30
+    ($xn3 $yn3 $zn) // 31
+);
+
+blocks
+(
+    //Forward blocks
+    hex (0 9 15 6 16 25 31 22) ($NX1 $NY1 $NZ) simpleGrading ($xe_front $ye_bottom 1) // hex block 1
+);
+
+edges
+(
+);
+
+boundary
+(
+    front
+    {
+        // type cyclic;
+	    // neighbourPatch back;
+        type patch;
+        faces
+        (
+            (0 9 25 16)
+        );
+    }
+    
+    back
+    {
+        // type cyclic;
+	    // neighbourPatch front;
+        type patch;
+        faces
+        (
+            (6 15 31 22)
+        );
+    }
+
+    // blockFaces
+    // {
+    //     type wall;
+    //     faces
+    //     (
+    //         (3 5 21 19)
+    //         (5 12 28 21)
+    //         (10 12 28 26)
+    //         (3 10 26 19)
+    //     );
+    // }
+    
+    inlet
+    {
+        type patch;
+        faces
+        (
+		(0 6 22 16)
+        );
+    }
+
+    outlet
+    {
+	
+        type patch;
+        faces
+        (
+		(9 15 31 25)
+        );
+	
+    }
+
+    bottom
+    {
+	
+        type wall;
+        faces
+        (
+    		//Forward blocks
+    		(0 9 15 6)
+        );
+	
+    }
+
+    top
+    {
+	
+        type wall;
+        faces
+        (
+    		//Forward blocks
+    		(16 25 31 22)
+        );
+	
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
