@@ -74,8 +74,10 @@ functions
         writeControl timeStep;
         // writeControl     writeTime;
         writeInterval 25;
-        pName           p;
-        Uname           U;
+        // pName           p;
+        // Uname           U;
+        pName           pa;
+        Uname           Ua;
         log             true;
     }
 };
