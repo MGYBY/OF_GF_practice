@@ -1,1 +1,1 @@
-The `0` folder.
+`0` folder.
