@@ -19,3 +19,4 @@ plt.ylabel('force')
 # add grid
 plt.grid()
 plt.show()
+plt.savefig("force.png")
