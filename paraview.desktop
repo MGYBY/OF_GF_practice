@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Name=Paraview 5.9
+GenericName=Text Editor
+Exec=paraview
+Terminal=false
+MimeType=text/plain;
+Icon=/opt/ParaView-5.9/share/icons/hicolor/96x96/apps/paraview.png
+Type=Application
+x-Ayatana-Desktop-Shortcuts=NewWindow
+
+[NewWindow Shortcut Group]
+Name=New Window
+Exec=paraview
+TargetEnvironment=Unity
